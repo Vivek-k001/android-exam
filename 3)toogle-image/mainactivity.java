@@ -1,4 +1,4 @@
-package com.example.imagetoggleapp;
+package com.example.exam;
 
 import android.os.Bundle;
 import android.widget.Button;

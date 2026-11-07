@@ -1,4 +1,4 @@
-package com.example.explicitintent;
+package com.example.exam;
 
 import android.os.Bundle;
 import android.widget.TextView;

@@ -1,4 +1,4 @@
-package com.example.loginregisterapp;
+package com.example.exam;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

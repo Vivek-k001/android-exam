@@ -50,8 +50,8 @@ code_style = ParagraphStyle(
     'CodeStyle',
     parent=styles['Normal'],
     fontName='Courier',
-    fontSize=7,
-    leading=8.8,
+    fontSize=6.8,
+    leading=8.6,
     textColor=colors.HexColor("#0F172A")
 )
 
@@ -149,7 +149,13 @@ story.append(make_story_box(
 ))
 story.append(Spacer(1, 4))
 
-code_p1 = """public class MainActivity extends AppCompatActivity {
+code_p1 = """package com.example.exam;
+
+import android.os.Bundle;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,46 +209,42 @@ story.append(Spacer(1, 3))
 
 story.append(make_story_box(
     "<b>📖 Story — The Secret Diary & The Bouncer:</b><br/>"
-    "• <b>Registration Screen:</b> You buy a diary, write your secret password with a pen (<code>edit().putString()</code>), and snap it shut (<code>apply()</code>).<br/>"
-    "• <b>SharedPreferences File:</b> The locked diary stored safely in the phone's private storage (<code>MODE_PRIVATE</code>).<br/>"
-    "• <b>Login Screen:</b> You reach the club door. The Bouncer opens the diary (<code>getString()</code>), checks your entered password, and says <i>'Welcome!'</i> (Toast)."
+    "• <b>Registration Screen:</b> Write your secret password with a pen (<code>edit().putString()</code>), snap it shut (<code>apply()</code>).<br/>"
+    "• <b>SharedPreferences File:</b> The locked diary stored in phone's private storage (<code>MODE_PRIVATE</code>).<br/>"
+    "• <b>Login Screen:</b> The Bouncer opens the diary (<code>getString()</code>), checks your password, and says <i>'Welcome!'</i>."
 ))
 story.append(Spacer(1, 4))
 
 code_p2 = """// 1. REGISTER ACTIVITY (MainActivity.java)
-btnRegister.setOnClickListener(v -> {
-    String u = etUser.getText().toString();
-    String p = etPass.getText().toString();
-    
-    // Write into SharedPreferences
+package com.example.exam;
+
+btn.setOnClickListener(v -> {
     SharedPreferences sp = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-    SharedPreferences.Editor editor = sp.edit();
-    editor.putString("KEY_USER", u);
-    editor.putString("KEY_PASS", p);
-    editor.apply(); // save to disk
+    sp.edit()
+      .putString("U", u.getText().toString())
+      .putString("P", p.getText().toString())
+      .apply();
     
-    // Explicit Intent to Login Screen
-    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+    Toast.makeText(this, "Registered!", Toast.LENGTH_SHORT).show();
+    startActivity(new Intent(this, LoginActivity.class));
 });
 
 // 2. LOGIN ACTIVITY (LoginActivity.java)
-btnLogin.setOnClickListener(v -> {
-    String enterU = etLoginUser.getText().toString();
-    String enterP = etLoginPass.getText().toString();
-    
-    // Read from SharedPreferences
+package com.example.exam;
+
+btn.setOnClickListener(v -> {
     SharedPreferences sp = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-    String savedU = sp.getString("KEY_USER", "");
-    String savedP = sp.getString("KEY_PASS", "");
+    String savedU = sp.getString("U", "");
+    String savedP = sp.getString("P", "");
     
-    if (enterU.equals(savedU) && enterP.equals(savedP)) {
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+    if (u.getText().toString().equals(savedU) && 
+        p.getText().toString().equals(savedP)) {
+        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
     } else {
         Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
     }
 });"""
 
-# Three separate screen mockups!
 i_reg = Image("generated_outputs/reg_screen.png", width=70, height=105)
 p_reg = Paragraph("1. Register Screen", img_label_style)
 i_log = Image("generated_outputs/login_screen.png", width=70, height=105)
@@ -274,8 +276,9 @@ story.append(make_story_box(
 ))
 story.append(Spacer(1, 4))
 
-code_p3 = """public class MainActivity extends AppCompatActivity {
-    // 1. State variable to track which image is currently displayed
+code_p3 = """package com.example.exam;
+
+public class MainActivity extends AppCompatActivity {
     private boolean isFirstImage = true;
 
     @Override
@@ -286,18 +289,9 @@ code_p3 = """public class MainActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.imageView);
         Button btnToggle = findViewById(R.id.btnToggle);
 
-        btnToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 2. Toggle image resource based on state
-                if (isFirstImage) {
-                    imageView.setImageResource(R.drawable.image2);
-                    isFirstImage = false;
-                } else {
-                    imageView.setImageResource(R.drawable.image1);
-                    isFirstImage = true;
-                }
-            }
+        btnToggle.setOnClickListener(v -> {
+            imageView.setImageResource(isFirstImage ? R.drawable.image2 : R.drawable.image1);
+            isFirstImage = !isFirstImage;
         });
     }
 }"""
@@ -330,35 +324,28 @@ story.append(make_story_box(
 ))
 story.append(Spacer(1, 4))
 
-code_p4 = """public class MainActivity extends AppCompatActivity {
+code_p4 = """package com.example.exam;
+
+public class MainActivity extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
         setContentView(R.layout.activity_main);
 
-        Spinner spinner = findViewById(R.id.spinnerCourse);
-        String[] courses = {"MCA", "BCA", "B.Tech", "M.Tech"};
+        Spinner s = findViewById(R.id.spinner);
+        String[] c = {"MCA", "BCA", "B.Tech", "M.Tech"};
 
-        // 1. Adapter bridges Data Array -> Spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-            this,
-            android.R.layout.simple_spinner_item,
-            courses
-        );
-        adapter.setDropDownViewResource(
-            android.R.layout.simple_spinner_dropdown_item
-        );
-        spinner.setAdapter(adapter);
+        // 1. One-line Adapter setup
+        s.setAdapter(new ArrayAdapter<>(this, 
+            android.R.layout.simple_spinner_dropdown_item, c));
 
         // 2. Selection Listener
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
-                Toast.makeText(MainActivity.this, 
-                    "Selected: " + courses[pos], Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, c[pos], Toast.LENGTH_SHORT).show();
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 }"""
@@ -373,7 +360,7 @@ table_p4 = Table([[make_code_box(code_p4, width=425), img_col_4]], colWidths=[43
 table_p4.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP')]))
 story.append(table_p4)
 story.append(Spacer(1, 4))
-story.append(make_memory_box("💡 <b>Spinner Flow:</b> <b>Array &rarr; ArrayAdapter &rarr; setDropDownViewResource &rarr; setAdapter &rarr; setOnItemSelectedListener</b>."))
+story.append(make_memory_box("💡 <b>Spinner Flow:</b> <b>Array &rarr; ArrayAdapter &rarr; setAdapter &rarr; setOnItemSelectedListener</b>."))
 
 
 # ================= PAGE 5: ARRAY ADAPTER WITH LISTVIEW =================
@@ -391,33 +378,25 @@ story.append(make_story_box(
 ))
 story.append(Spacer(1, 4))
 
-code_p5 = """public class MainActivity extends AppCompatActivity {
+code_p5 = """package com.example.exam;
+
+public class MainActivity extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
         setContentView(R.layout.activity_main);
 
-        ListView listView = findViewById(R.id.listView);
+        ListView lv = findViewById(R.id.listView);
         String[] fruits = {"Apple", "Banana", "Orange", "Mango", "Grapes"};
 
         // 1. Adapter bridges String array -> ListView rows
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-            this,
-            android.R.layout.simple_list_item_1,
-            fruits
+        lv.setAdapter(new ArrayAdapter<>(this, 
+            android.R.layout.simple_list_item_1, fruits));
+
+        // 2. Row Click Listener
+        lv.setOnItemClickListener((p, v, pos, id) -> 
+            Toast.makeText(this, fruits[pos], Toast.LENGTH_SHORT).show()
         );
-
-        // 2. Set Adapter to ListView
-        listView.setAdapter(adapter);
-
-        // 3. Row Click Listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> p, View v, int pos, long id) {
-                Toast.makeText(MainActivity.this, 
-                    "Clicked: " + fruits[pos], Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }"""
 
@@ -442,37 +421,31 @@ story.append(Spacer(1, 3))
 
 story.append(make_story_box(
     "<b>📖 Story — The VIP Courier with Named Envelope:</b><br/>"
-    "• <b>Envelope (Intent):</b> Addressed directly from <code>MainActivity.this</code> to <code>SecondActivity.class</code>.<br/>"
+    "• <b>Envelope (Intent):</b> Addressed directly from <code>this</code> to <code>SecondActivity.class</code>.<br/>"
     "• <b>putExtra(\"KEY\", val):</b> Slipping the secret message into the envelope before mailing.<br/>"
     "• <b>startActivity():</b> Dispatching the courier off to deliver.<br/>"
     "• <b>getIntent().getStringExtra():</b> Opening the envelope at House #2 to read the message."
 ))
 story.append(Spacer(1, 4))
 
-code_p6 = """// 1. SENDER ACTIVITY (MainActivity.java)
-btnSend.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        String name = etName.getText().toString();
+code_p6 = """package com.example.exam;
 
-        // Explicitly name target class (SecondActivity.class)
-        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-        intent.putExtra("USER_NAME", name);
-        startActivity(intent);
-    }
+// 1. SENDER ACTIVITY (MainActivity.java)
+btn.setOnClickListener(v -> {
+    Intent i = new Intent(this, SecondActivity.class);
+    i.putExtra("USER", et.getText().toString());
+    startActivity(i);
 });
 
 // 2. RECEIVER ACTIVITY (SecondActivity.java)
 @Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+protected void onCreate(Bundle b) {
+    super.onCreate(b);
     setContentView(R.layout.activity_second);
 
-    TextView tvWelcome = findViewById(R.id.tvWelcome);
-
-    // Retrieve extras from Intent
-    String name = getIntent().getStringExtra("USER_NAME");
-    tvWelcome.setText("Welcome, " + name + "!");
+    TextView tv = findViewById(R.id.tvWelcome);
+    String name = getIntent().getStringExtra("USER");
+    tv.setText("Welcome, " + name + "!");
 }
 
 // 3. AndroidManifest.xml:
@@ -491,4 +464,4 @@ story.append(Spacer(1, 4))
 story.append(make_memory_box("💡 <b>Sender 3 P's:</b> <b>P</b>repare <code>new Intent(...)</code> &rarr; <b>P</b>ack <code>putExtra(...)</code> &rarr; <b>P</b>ush <code>startActivity()</code>.<br/><b>Receiver 2 G's:</b> <b>G</b>et <code>getIntent().getStringExtra()</code> &rarr; <b>G</b>ive to <code>setText()</code>."))
 
 doc.build(story)
-print(f"Rebuilt {pdf_filename} with full individual separate outputs successfully!")
+print(f"Rebuilt {pdf_filename} successfully!")

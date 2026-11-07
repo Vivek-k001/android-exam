@@ -1,4 +1,4 @@
-package com.example.explicitintent;
+package com.example.exam;
 
 import android.content.Intent;
 import android.os.Bundle;

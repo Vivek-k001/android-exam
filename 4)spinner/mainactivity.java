@@ -1,4 +1,4 @@
-package com.example.spinnercomponent;
+package com.example.exam;
 
 import android.os.Bundle;
 import android.view.View;
