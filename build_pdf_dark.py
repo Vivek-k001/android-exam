@@ -348,11 +348,9 @@ public class MainActivity extends AppCompatActivity {
         Spinner s = findViewById(R.id.spinner);
         String[] c = {"MCA", "BCA", "B.Tech", "M.Tech"};
 
-        // 1. One-line Adapter setup
         s.setAdapter(new ArrayAdapter<>(this, 
             android.R.layout.simple_spinner_dropdown_item, c));
 
-        // 2. Selection Listener
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
