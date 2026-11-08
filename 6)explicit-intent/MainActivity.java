@@ -2,23 +2,24 @@ package com.example.exam;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
-    protected void onCreate(Bundle b) {
-        super.onCreate(b);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EditText et = findViewById(R.id.etName);
-        Button btn = findViewById(R.id.btnSend);
+        EditText etName = findViewById(R.id.etName);
+        Button btnSend = findViewById(R.id.btnSend);
 
-        btn.setOnClickListener(v -> {
-            Intent i = new Intent(this, SecondActivity.class);
-            i.putExtra("USER", et.getText().toString());
-            startActivity(i);
+        btnSend.setOnClickListener(v -> {
+            String name = etName.getText().toString();
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            intent.putExtra("USER", name);
+            startActivity(intent);
         });
     }
 }

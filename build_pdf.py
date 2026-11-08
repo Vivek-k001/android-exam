@@ -431,28 +431,35 @@ story.append(make_story_box(
 ))
 story.append(Spacer(1, 4))
 
-code_p6 = """package com.example.exam;
-
-// 1. SENDER ACTIVITY (MainActivity.java)
-btn.setOnClickListener(v -> {
-    Intent i = new Intent(this, SecondActivity.class);
-    i.putExtra("USER", et.getText().toString());
-    startActivity(i);
-});
-
-// 2. RECEIVER ACTIVITY (SecondActivity.java)
-@Override
-protected void onCreate(Bundle b) {
-    super.onCreate(b);
-    setContentView(R.layout.activity_second);
-
-    TextView tv = findViewById(R.id.tvWelcome);
-    String name = getIntent().getStringExtra("USER");
-    tv.setText("Welcome, " + name + "!");
+code_p6 = """// 1. SENDER (MainActivity.java)
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        EditText etName = findViewById(R.id.etName);
+        Button btnSend = findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(v -> {
+            String name = etName.getText().toString();
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            intent.putExtra("USER", name);
+            startActivity(intent);
+        });
+    }
 }
 
-// 3. AndroidManifest.xml:
-// <activity android:name=".SecondActivity" />"""
+// 2. RECEIVER (SecondActivity.java)
+public class SecondActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        TextView tvWelcome = findViewById(R.id.tvWelcome);
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("USER");
+        tvWelcome.setText("Welcome, " + name + "!");
+    }
+}"""
 
 img_col_6 = make_two_images_column(
     "generated_outputs/intent_sender.png", "Screen 1: Sender Activity",

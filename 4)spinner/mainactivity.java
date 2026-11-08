@@ -1,4 +1,4 @@
-package com.example.exam;
+package com.example.spinnercomponent;
 
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +15,8 @@ public class MainActivity extends AppCompatActivity {
         Spinner s = findViewById(R.id.spinner);
         String[] c = {"MCA", "BCA", "B.Tech", "M.Tech"};
 
-        s.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, c));
+        s.setAdapter(new ArrayAdapter<>(this, 
+        android.R.layout.simple_spinner_dropdown_item, c));
 
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
