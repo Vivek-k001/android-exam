@@ -298,8 +298,13 @@ public class MainActivity extends AppCompatActivity {
         Button btnToggle = findViewById(R.id.btnToggle);
 
         btnToggle.setOnClickListener(v -> {
-            imageView.setImageResource(isFirstImage ? R.drawable.image2 : R.drawable.image1);
-            isFirstImage = !isFirstImage;
+            if (isFirstImage) {
+                imageView.setImageResource(R.drawable.image2);
+                isFirstImage = false;
+            } else {
+                imageView.setImageResource(R.drawable.image1);
+                isFirstImage = true;
+            }
         });
     }
 }"""
